@@ -1,7 +1,8 @@
 :: Wrapper: Offline Installer
 :: Author: octanuary#6596 (narutofan420)
+:: i mean benson made most of it since a lot of this was taken from start_wrapper.bat
 :: License: MIT
-title Wrapper: Offline Installer and Updater [Initializing...]
+title Wrapper: Offline Installer [Initializing...]
 
 ::::::::::::::::::::
 :: Initialization ::
@@ -23,7 +24,7 @@ pushd "%~dp0"
 :: Dependency Check ::
 ::::::::::::::::::::::
 
-title Wrapper: Offline Installer and Updater [Checking for Git...]
+title Wrapper: Offline Installer [Checking for Git...]
 echo Checking for Git installation...
 
 :: Preload variables
@@ -45,7 +46,7 @@ popd
 ::::::::::::::::::::::::
 
 if !GIT_DETECTED!==n (
-	title Wrapper: Offline Installer and Updater [Installing Git...]
+	title Wrapper: Offline Installer [Installing Git...]
 	echo:
 	echo Installing Git...
 	echo:
@@ -151,7 +152,7 @@ echo:
 
 :standard
 cls
-echo Wrapper: Offline Installer and Updater
+echo Wrapper: Offline Installer
 echo A project from VisualPlugin adapted by Benson and the Wrapper: Offline Team
 echo:
 echo Enter 1 to install Wrapper: Offline
@@ -184,45 +185,108 @@ echo Time to choose. && goto wrapperidle
 
 :download
 cls
-title Wrapper: Offline Installer and Updater [Cloning repository...]
+title Wrapper: Offline Installer [Cloning repository...]
 pushd "%~dp0..\"
 echo Cloning the latest version of the repository from GitHub...
 echo:
 call git clone https://github.com/Zoccorus-GoAnimate/wrapper-offline.git
+:: I'm doing this to get around the .gitignore problem but this is only for first-time users
+echo Resetting config.bat...
+del wrapper-offline\utilities\config.bat
+echo :: Wrapper: Offline Config>> wrapper-offline\utilities\config.bat
+echo :: This file is modified by settings.bat. It is not organized, but comments for each setting have been added.>> wrapper-offline\utilities\config.bat
+echo :: You should be using settings.bat, and not touching this. Offline relies on this file remaining consistent, and it's easy to mess that up.>> wrapper-offline\utilities\config.bat
+echo:>> wrapper-offline\utilities\config.bat
+echo :: Opens this file in Notepad when run>> wrapper-offline\utilities\config.bat
+echo setlocal>> wrapper-offline\utilities\config.bat
+echo if "%%SUBSCRIPT%%"=="" ( start notepad.exe "%%CD%%\%%~nx0" ^& exit )>> wrapper-offline\utilities\config.bat
+echo endlocal>> wrapper-offline\utilities\config.bat
+echo:>> wrapper-offline\utilities\config.bat
+echo :: Shows exactly Offline is doing, and never clears the screen. Useful for development and troubleshooting. Default: n>> wrapper-offline\utilities\config.bat
+echo set VERBOSEWRAPPER=n>> wrapper-offline\utilities\config.bat
+echo:>> wrapper-offline\utilities\config.bat
+echo :: Won't check for dependencies (flash, node, etc) and goes straight to launching. Useful for speedy launching post-install. Default: n>> wrapper-offline\utilities\config.bat
+echo set SKIPCHECKDEPENDS=n>> wrapper-offline\utilities\config.bat
+echo:>> wrapper-offline\utilities\config.bat
+echo :: Won't install dependencies, regardless of check results. Overridden by SKIPCHECKDEPENDS. Mostly useless, why did I add this again? Default: n>> wrapper-offline\utilities\config.bat
+echo set SKIPDEPENDINSTALL=n>> wrapper-offline\utilities\config.bat
+echo:>> wrapper-offline\utilities\config.bat
+echo :: Opens Offline in an included copy of ungoogled-chromium. Allows continued use of Flash as modern browsers disable it. Default: y>> wrapper-offline\utilities\config.bat
+echo set INCLUDEDCHROMIUM=y>> wrapper-offline\utilities\config.bat
+echo:>> wrapper-offline\utilities\config.bat
+echo :: Opens INCLUDEDCHROMIUM in headless mode. Looks pretty nice. Overrides CUSTOMBROWSER and BROWSER_TYPE. Default: y>> wrapper-offline\utilities\config.bat
+echo set APPCHROMIUM=y>> wrapper-offline\utilities\config.bat
+echo:>> wrapper-offline\utilities\config.bat
+echo :: Opens Offline in a browser of the user's choice. Needs to be a path to a browser executable in quotes. Default: n>> wrapper-offline\utilities\config.bat
+echo set CUSTOMBROWSER=n>> wrapper-offline\utilities\config.bat
+echo:>> wrapper-offline\utilities\config.bat
+echo :: Lets the launcher know what browser framework is being used. Mostly used by the Flash installer. Accepts "chrome", "firefox", and "n". Default: n>> wrapper-offline\utilities\config.bat
+echo set BROWSER_TYPE=chrome>> wrapper-offline\utilities\config.bat
+echo:>> wrapper-offline\utilities\config.bat
+echo :: Runs through all of the scripts code, while never launching or installing anything. Useful for development. Default: n>> wrapper-offline\utilities\config.bat
+echo set DRYRUN=n>> wrapper-offline\utilities\config.bat
+echo:>> wrapper-offline\utilities\config.bat
+echo :: Makes it so it uses the Cepstral website instead of VFProxy. Default: n>> wrapper-offline\utilities\config.bat
+echo set CEPSTRAL=n>> wrapper-offline\utilities\config.bat
+echo:>> wrapper-offline\utilities\config.bat
+echo :: Opens Offline in an included copy of Basilisk, sourced from BlueMaxima's Flashpoint.>> wrapper-offline\utilities\config.bat
+echo :: Allows continued use of Flash as modern browsers disable it. Default: n>> wrapper-offline\utilities\config.bat
+echo:>> wrapper-offline\utilities\config.bat
+echo set INCLUDEDBASILISK=n>> wrapper-offline\utilities\config.bat
+echo:>> wrapper-offline\utilities\config.bat
+echo :: Makes it so both the settings and the Wrapper launcher shows developer options. Default: n>> wrapper-offline\utilities\config.bat
+echo set DEVMODE=n>> wrapper-offline\utilities\config.bat
+echo:>> wrapper-offline\utilities\config.bat
+echo :: Tells settings.bat which port the frontend is hosted on. ^(If changed manually, you MUST also change the value of "SERVER_PORT" to the same value in wrapper\env.json^) Default: 4343>> wrapper-offline\utilities\config.bat
+echo set PORT=4343>> wrapper-offline\utilities\config.bat
+echo:>> wrapper-offline\utilities\config.bat
+echo :: Enables configure_wrapper.bat. Useful for investigating things like problems with Node.js or http-server. Default: n>> wrapper-offline\utilities\config.bat
+echo set CONFIGURE=n>> wrapper-offline\utilities\config.bat
+echo:>> wrapper-offline\utilities\config.bat
+echo Resetting imported assets...
+pushd wrapper-offline\server\store\3a981f5cb2739137
+rd /q /s import
+md import
+pushd import
+echo ^<?xml version="1.0" encoding="utf-8"?^> >>theme.xml
+echo ^<theme id="import" name="Imported Assets" cc_theme_id="import"^> >>theme.xml
+echo 	^<char id="327068788" name="the benson apparition" cc_theme_id="family" thumbnail_url="char-default.png" copyable="Y"^> >>theme.xml
+echo 	^<tags^>family,every,copy,of,wrapper,offline,is,_free,software,but,is,also,_cat:personalized^</tags^> >>theme.xml
+echo 	^</char^> >>theme.xml
+echo:>>theme.xml
+echo ^</theme^> >>theme.xml
+popd
+call wrapper-offline\utilities\7za.exe a "wrapper-offline\server\store\3a981f5cb2739137\import\import.zip" "wrapper-offline\server\store\3a981f5cb2739137\import\theme.xml" >nul
+del /q /s wrapper-offline\utilities\import_these
+md wrapper-offline\utilities\import_these
+copy "wrapper-offline\server\store\3a981f5cb2739137\import\theme.xml" "wrapper-offline\wrapper\_THEMES\import.xml" /y
+echo Creating quick shortcut in directory where Wrapper was cloned using NirCMD...
+del "wrapper-offline\Wrapper Offline.lnk"
+echo:
+pushd wrapper-offline
+call utilities\nircmd\nircmd.exe shortcut '%windir%\System32\cmd.exe /c START "" "start_wrapper.bat"' "%CD%" "Wrapper Offline" "" "%CD%\wrapper\favicon.ico" "" "" "%CD%\"
+popd
+echo Shortcut created.
+echo:
 cls
 echo The repository has been cloned.
 echo:
-if not exist "wrapper-offline\Wrapper Offline.lnk" (
-	echo Creating quick shortcut in directory where Wrapper was cloned using NirCMD...
-	echo:
-	pushd wrapper-offline
-	call utilities\nircmd\nircmd.exe shortcut '%windir%\System32\cmd.exe /c START "" "start_wrapper.bat"' "%CD%" "Wrapper Offline" "" "%CD%\wrapper\favicon.ico" "" "" "%CD%\"
-	popd
-	echo Shortcut created.
-	echo:
-)
-if not exist "%tmp%\startwrapperalreadyran.txt" (
-	echo The next step is to run "start_wrapper.bat" as admin to install any
-	echo missing dependencies. This will only be required once.
-	echo:
-	pause
-	start "" "%dp0..\wrapper-offline"
-	echo The directory where it cloned to has been opened.
-	echo:
-	echo There is no way to program this so that it automatically opens
-	echo "start_wrapper.bat" as admin, so this is the only way to do it.
-	echo:
-	echo Once you've run "start_wrapper.bat" as admin, you may continue
-	echo in this window. An additional question in the setup will be asked.
-	echo:
-	pause
-	echo This .TXT file exists to signal that the user already ran start_wrapper.bat as admin during their first time using this installer/updater.>%tmp%\startwrapperalreadyran.txt
-	goto installed
-) else (
-	goto installed
-)
-:installed
-echo Wrapper: Offline has been installed ^(or updated^)^^! Feel free to move it wherever you want.
+echo The next step is to run "start_wrapper.bat" as admin to install any
+echo missing dependencies. This will only be required once.
+echo:
+pause
+start "" "%dp0..\wrapper-offline"
+echo The directory where it cloned to has been opened.
+echo:
+echo There is no way to program this so that it automatically opens
+echo "start_wrapper.bat" as admin, so this is the only way to do it.
+echo:
+echo Once you've run "start_wrapper.bat" as admin, you may continue
+echo in this window. An additional question in the setup will be asked.
+echo:
+pause
+echo This .TXT file exists to signal that the user already ran start_wrapper.bat as admin during their first time using this installer/updater.>%tmp%\startwrapperalreadyran.txt
+echo Wrapper: Offline has been installed^^! Feel free to move it wherever you want.
 echo:
 echo Would you like to add a shortcut on your desktop?
 echo:
@@ -237,7 +301,11 @@ if "!shortcut!"=="1" (
 	pushd wrapper-offline
 	call utilities\nircmd\nircmd.exe shortcut "%CD%\start_wrapper.bat" "~$folder.desktop$" "Wrapper Offline" "" "%CD%\wrapper\favicon.ico"
 	popd
-	copy "%USERPROFILE%\Desktop\Wrapper Offline.lnk" "%Public%\Desktop"
+	if exist "%ONEDRIVE%\Desktop" (
+		copy "%ONEDRIVE%\Desktop\Wrapper Offline.lnk" "%Public%\Desktop"
+	) else (
+		copy "%USERPROFILE%\Desktop\Wrapper Offline.lnk" "%Public%\Desktop"
+	)
 	echo Shortcut created on Desktop.
 	echo:
 )
