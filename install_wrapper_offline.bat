@@ -132,7 +132,7 @@ echo Read the LICENSE file in Offline's base folder and the licenses in utilitie
 echo:
 echo By continuing to use Wrapper: Offline, you acknowledge the nature of this project, and your right to use it.
 echo If you object to any of this, feel free to close the Wrapper: Offline installer now.
-echo You will be allowed to accept 15 seconds after this message has appeared.
+echo You will be allowed to accept 5 seconds after this message has appeared.
 echo: 
 PING -n 16 127.0.0.1>nul
 echo If you still want to install and use Wrapper: Offline, press Y. If you no longer want to, press N.
