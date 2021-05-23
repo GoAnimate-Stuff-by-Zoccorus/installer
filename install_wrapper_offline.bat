@@ -57,7 +57,7 @@ if !GIT_DETECTED!==n (
 		echo:
 		echo ERROR
 		echo:
-		echo Wrapper: Offline needs to install Git.
+		echo Wrapper: Offline needs to install Git and launch the launcher as admin later.
 		echo To do this, the installer must be started with Admin rights.
 		echo:
 		echo Close this window and re-open the installer as an Admin.
@@ -86,32 +86,18 @@ if !GIT_DETECTED!==n (
 	
 	:git_installed
 	echo Git has been installed.
-	set GIT_DETECTED=y
-)
-
-:: Alert user to restart the installer without running as Admin
-if !ADMINREQUIRED!==y (
-	color 20
-	cls
 	echo:
-	echo Wrapper: Offline no longer needs Admin rights,
-	echo please restart normally by double-clicking.
+	echo You may now restart the installer.
+	echo Make sure to start it as admin still.
 	echo:
-	pause
-	exit
+	pause & exit
 )
 
 :::::::::::::::::::::::::
 :: Post-Initialization ::
 :::::::::::::::::::::::::
 
-if exist "%tmp%\WOinstDISCyes.txt" (
-	goto standard
-) else (
-	goto disclaimer
-)
-
-title Wrapper: Offline Installer and Updater
+title Wrapper: Offline Installer
 :cls
 cls
 
@@ -132,7 +118,7 @@ echo Read the LICENSE file in Offline's base folder and the licenses in utilitie
 echo:
 echo By continuing to use Wrapper: Offline, you acknowledge the nature of this project, and your right to use it.
 echo If you object to any of this, feel free to close the Wrapper: Offline installer now.
-echo You will be allowed to accept 5 seconds after this message has appeared.
+echo You will be allowed to accept 15 seconds after this message has appeared.
 echo: 
 PING -n 16 127.0.0.1>nul
 echo If you still want to install and use Wrapper: Offline, press Y. If you no longer want to, press N.
@@ -146,7 +132,7 @@ goto disclaimacceptretry
 :disclaimaccepted
 echo: 
 echo Sorry for all the legalese, let's get back on track.
-echo This file exists to signal that the disclaimer on the installer/updater was acknowledged.>%tmp%\WOinstDISCyes.txt
+echo You've accepted the disclaimer. To reread it, remove this file.>%tmp%\WOdisclaimer.txt
 PING -n 4 127.0.0.1>nul
 echo:
 
@@ -260,6 +246,9 @@ call wrapper-offline\utilities\7za.exe a "wrapper-offline\server\store\3a981f5cb
 del /q /s wrapper-offline\utilities\import_these
 md wrapper-offline\utilities\import_these
 copy "wrapper-offline\server\store\3a981f5cb2739137\import\theme.xml" "wrapper-offline\wrapper\_THEMES\import.xml" /y
+echo Moving "disclaimer accepted" text file from temporary system directory to utilities\checks folder...
+copy "%tmp%\WOdisclaimer.txt" "wrapper-offline\utilities\checks\disclaimer.txt" /y
+del "%tmp%\WOdisclaimer.txt"
 echo Creating quick shortcut in directory where Wrapper was cloned using NirCMD...
 del "wrapper-offline\Wrapper Offline.lnk"
 echo:
@@ -271,21 +260,33 @@ echo:
 cls
 echo The repository has been cloned.
 echo:
-echo The next step is to run "start_wrapper.bat" as admin to install any
-echo missing dependencies. This will only be required once.
+echo The next step is to run "start_wrapper.bat" as admin
+echo to install any extra dependencies that might be missing.
 echo:
-pause
-start "" "%dp0..\wrapper-offline"
-echo The directory where it cloned to has been opened.
-echo:
-echo There is no way to program this so that it automatically opens
-echo "start_wrapper.bat" as admin, so this is the only way to do it.
-echo:
-echo Once you've run "start_wrapper.bat" as admin, you may continue
-echo in this window. An additional question in the setup will be asked.
-echo:
-pause
-echo This .TXT file exists to signal that the user already ran start_wrapper.bat as admin during their first time using this installer/updater.>%tmp%\startwrapperalreadyran.txt
+fsutil dirty query !systemdrive! >NUL 2>&1
+if /i not !ERRORLEVEL!==0 (
+	echo However, it appears that for some reason you aren't
+	echo still running this installer as admin, so you will
+	echo need to do it manually.
+	echo:
+	pause
+	start "" "%~dp0..\wrapper-offline"
+	echo The directory where it cloned to has been opened.
+	echo:
+	echo Right click "start_wrapper.bat" and run it as admin.
+	echo When finished, press any key for further instructions.
+	echo:
+	pause
+) else (
+	pause
+	start "" "%~dp0..\wrapper-offline\start_wrapper.bat"
+	echo:
+	echo The rest of the installer has been launched.
+	echo:
+	echo When finished with this step, press any key for further instructions.
+	echo:
+	pause
+)
 echo Wrapper: Offline has been installed^^! Feel free to move it wherever you want.
 echo:
 echo Would you like to add a shortcut on your desktop?
