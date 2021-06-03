@@ -1,5 +1,5 @@
 :: Wrapper: Offline Installer
-:: Author: octanuary#6596 (narutofan420)
+:: Author: octanuary#6596
 :: i mean benson made most of it since a lot of this was taken from start_wrapper.bat
 :: License: MIT
 title Wrapper: Offline Installer [Initializing...]
@@ -62,15 +62,16 @@ if !GIT_DETECTED!==n (
 		echo:
 		echo Press any key to restart this window and accept any admin prompts that pop up.
 		pause
-		echo Set UAC = CreateObject^("Shell.Application"^)>> %temp%\requestAdmin.vbs
-		echo UAC.ShellExecute "%~s0", "", "", "runas", 1>> %temp%\requestAdmin.vbs
-		start %temp%\requestAdmin.vbs
+		echo Set UAC = CreateObject^("Shell.Application"^) > %tmp%\requestAdmin.vbs
+		set params= %*
+		echo UAC.ShellExecute "cmd.exe", "/c ""%~s0"" %params:"=""%", "", "runas", 1 >> %tmp%\requestAdmin.vbs
+		start "" %tmp%\requestAdmin.vbs
 		exit /B
 		)
 	)
 )
 :postadmincheck
-if exist "%temp%\requestAdmin.vbs" ( del "%temp%\requestAdmin.vbs" )
+if exist "%tmp%\requestAdmin.vbs" ( del "%tmp%\requestAdmin.vbs">nul )
 
 if !GIT_DETECTED!==n (
 	:: Install Git
