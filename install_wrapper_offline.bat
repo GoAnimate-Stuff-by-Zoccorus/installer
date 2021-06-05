@@ -179,7 +179,7 @@ title Wrapper: Offline Installer [Cloning repository...]
 pushd "%~dp0..\"
 echo Cloning the latest version of the repository from GitHub...
 echo:
-call git clone https://github.com/Zoccorus-GoAnimate/wrapper-offline.git
+call git clone https://github.com/GoAnimate-Stuff-by-Zoccorus/wrapper-offline.git --recursive
 :: I'm doing this to get around the .gitignore problem but this is only for first-time users
 echo Resetting config.bat...
 del wrapper-offline\utilities\config.bat
