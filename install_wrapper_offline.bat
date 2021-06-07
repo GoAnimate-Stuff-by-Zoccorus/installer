@@ -233,23 +233,6 @@ echo:>> wrapper-offline\utilities\config.bat
 echo :: Enables configure_wrapper.bat. Useful for investigating things like problems with Node.js or http-server. Default: n>> wrapper-offline\utilities\config.bat
 echo set CONFIGURE=n>> wrapper-offline\utilities\config.bat
 echo:>> wrapper-offline\utilities\config.bat
-echo Resetting imported assets...
-pushd wrapper-offline\server\store\3a981f5cb2739137
-rd /q /s import
-md import
-pushd import
-echo ^<?xml version="1.0" encoding="utf-8"?^> >>theme.xml
-echo ^<theme id="import" name="Imported Assets" cc_theme_id="import"^> >>theme.xml
-echo 	^<char id="327068788" name="the benson apparition" cc_theme_id="family" thumbnail_url="char-default.png" copyable="Y"^> >>theme.xml
-echo 	^<tags^>family,every,copy,of,wrapper,offline,is,_free,software,but,is,also,_cat:personalized^</tags^> >>theme.xml
-echo 	^</char^> >>theme.xml
-echo:>>theme.xml
-echo ^</theme^> >>theme.xml
-popd
-call wrapper-offline\utilities\7za.exe a "wrapper-offline\server\store\3a981f5cb2739137\import\import.zip" "wrapper-offline\server\store\3a981f5cb2739137\import\theme.xml" >nul
-del /q /s wrapper-offline\utilities\import_these
-md wrapper-offline\utilities\import_these
-copy "wrapper-offline\server\store\3a981f5cb2739137\import\theme.xml" "wrapper-offline\wrapper\_THEMES\import.xml" /y
 echo Moving "disclaimer accepted" text file from temporary system directory to utilities\checks folder...
 copy "%tmp%\WOdisclaimer.txt" "wrapper-offline\utilities\checks\disclaimer.txt" /y
 del "%tmp%\WOdisclaimer.txt"
